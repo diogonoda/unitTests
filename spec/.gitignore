@@ -1,0 +1,4 @@
+factories
+helpers
+database.yml
+spec_helper.rb
