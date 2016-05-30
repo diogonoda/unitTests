@@ -21,7 +21,7 @@ describe 'Testa rotinas da pc_employees' do
                   :emp_id       => 2,
                   :emp_name     => "Diogo",
                   :emp_salary   => 2000,
-                  :emp_hiredate => Time.local(2015, 8, 2, 23, 52, 37),
+                  :emp_hiredate => Time.local(2015, 8, 3, 23, 39, 28),
                   :emp_dept_id  => 1
                  }
 
@@ -116,5 +116,5 @@ describe 'Testa rotinas da pc_employees' do
     expect(plsql.pc_employees.pode_receber_aumento(:p_employee => v_employee)).to eq(v_pode_receber_aumento)
 
   end
-  
+
 end
