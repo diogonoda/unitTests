@@ -1,0 +1,47 @@
+commit
+e0987ebb3bfcbe132b62e56154de3c78be8e0fce
+
+tag
+v1.0
+
+
+7d5226c53f4a7376210028964953cd009303208c
+
+declare
+  p_id  employees.emp_id%type := &emp_id;
+  --
+  v_salary    employees.emp_salary%type;
+  v_name      employees.emp_name%type;
+  v_hiredate  employees.emp_hiredate%type;
+begin
+  select emp_salary,
+         emp_name,
+         emp_hiredate
+    into v_salary,
+         v_name,
+         v_hiredate
+    from employees
+   where emp_id = p_id;
+  --
+  dbms_output.put_line(   'Antes da rotina - Nome: ' || v_name
+                       || ' - Salário: ' || v_salary
+                       || ' - Data de Contratação: ' || v_hiredate);
+  --
+  pc_employees.aumenta_salario(p_id => p_id);
+  --
+  select emp_salary,
+         emp_name,
+         emp_hiredate
+    into v_salary,
+         v_name,
+         v_hiredate
+    from employees
+   where emp_id = p_id;
+  --
+  dbms_output.put_line(   'Depois da rotina - Nome: ' || v_name
+                       || ' - Salário: ' || v_salary
+                       || ' - Data de Contratação: ' || v_hiredate);
+  --
+  rollback;
+end;
+/

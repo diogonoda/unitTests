@@ -25,10 +25,12 @@ create or replace package body pc_employees
     select emp_id,
            emp_name,
            emp_salary,
+           emp_hiredate,
            emp_dept_id
       into v_employee.emp_id,
            v_employee.emp_name,
            v_employee.emp_salary,
+           v_employee.emp_hiredate,
            v_employee.emp_dept_id
       from employees
      where emp_id = p_id;
