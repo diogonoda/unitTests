@@ -20,7 +20,7 @@ create or replace package body pc_departments
            v_department.dept_name,
            v_department.dept_sta_bonus
       from departments
-     where dept_id = 2;
+     where dept_id = p_id;
     --
     return v_department;
   exception
