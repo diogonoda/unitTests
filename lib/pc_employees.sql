@@ -11,6 +11,9 @@ create or replace package pc_employees
     return employees.emp_name%type;
   --
   procedure aumenta_salario(p_id  in  employees.emp_id%type);
+  --
+  function pode_receber_aumento(p_employee  in  employees%rowtype)
+    return boolean;
 end pc_employees;
 /
 --
@@ -70,33 +73,30 @@ create or replace package body pc_employees
   --
   procedure aumenta_salario(p_id  in  employees.emp_id%type)
    is
-    v_salary    employees.emp_salary%type;
-    v_hiredate  employees.emp_hiredate%type;
-    v_dept_id   employees.emp_dept_id%type;
-    --
-    v_sta_bonus  departments.dept_sta_bonus%type;
+    v_employee  employees%rowtype;
   begin
-    select emp_salary,
-           emp_hiredate,
-           emp_dept_id
-      into v_salary,
-           v_hiredate,
-           v_dept_id
-      from employees
-     where emp_id = p_id;
+    v_employee := pc_employees.get_employee(p_id => p_id);
     --
-    if months_between(sysdate, v_hiredate) >= 12 then
-      select dept_sta_bonus
-        into v_sta_bonus
-        from departments
-       where dept_id = v_dept_id;
-      --
-      if v_sta_bonus = 'S' then
-        update employees
-           set emp_salary = emp_salary * 1.1
-         where emp_id = p_id;
-      end if;
+    if pc_employees.pode_receber_aumento(p_employee => v_employee) then
+      update employees
+         set emp_salary = emp_salary * 1.1
+       where emp_id = p_id;
     end if;
   end aumenta_salario;
+  --
+  function pode_receber_aumento(p_employee  in  employees%rowtype)
+    return boolean
+   is
+  begin
+    if months_between(sysdate, p_employee.emp_hiredate) < 12 then
+      return false;
+    end if;
+    --
+    if pc_departments.get_department(p_id => p_employee.emp_dept_id).dept_sta_bonus = 'N' then
+      return false;
+    end if;
+    --
+    return true;
+  end pode_receber_aumento;
 end pc_employees;
 /
