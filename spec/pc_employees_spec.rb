@@ -100,4 +100,31 @@ describe 'Testa rotinas da pc_employees' do
                             " where emp_id = " + v_employee[:emp_id].to_s)).to eq(v_employee[:emp_salary] * 1.1)
 
   end
+
+  it 'Employee com menos de 1 ano não pode receber aumento' do
+
+    v_pode_receber_aumento = false
+
+    v_department = {
+                    :dept_id        => -1,
+                    :dept_name      => "US Mariners",
+                    :dept_sta_bonus => "S"
+                   }
+
+    plsql.departments.insert v_department
+
+    v_employee = {
+                  :emp_id       => -1,
+                  :emp_name     => "Mussum Forevis",
+                  :emp_salary   => 1000,
+                  :emp_hiredate => plsql.sysdate,
+                  :emp_dept_id  => -1
+                 }
+
+    plsql.employees.insert v_employee
+
+    expect(plsql.pc_employees.pode_receber_aumento(:p_employee => v_employee)).to eq(v_pode_receber_aumento)
+
+  end
+
 end
