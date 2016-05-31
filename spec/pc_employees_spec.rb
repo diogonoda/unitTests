@@ -17,15 +17,25 @@ describe 'Testa rotinas da pc_employees' do
 
   it 'Retorna o registro do employee' do
 
+    v_department = {
+                    :dept_id        => -1,
+                    :dept_name      => "US Mariners",
+                    :dept_sta_bonus => "S"
+                   }
+
+    plsql.departments.insert v_department
+
     v_employee = {
-                  :emp_id       => 2,
-                  :emp_name     => "Diogo",
-                  :emp_salary   => 2000,
+                  :emp_id       => -1,
+                  :emp_name     => "Mussum Forevis",
+                  :emp_salary   => 1000,
                   :emp_hiredate => Time.local(2015, 8, 2, 23, 52, 37),
-                  :emp_dept_id  => 1
+                  :emp_dept_id  => -1
                  }
 
-    expect(plsql.pc_employees.get_employee(:p_id => 2)).to eq(v_employee)
+    plsql.employees.insert v_employee
+
+    expect(plsql.pc_employees.get_employee(:p_id => -1)).to eq(v_employee)
 
   end
 
